@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-import MainPage from './pages/MainPage';
-import RecipeForm from './pages/RecipeForm';
-import DishTypeManager from './pages/DishTypeManager';
+import MainPage from './components/MainPage';
+import RecipeForm from './components/RecipeForm';
+import DishTypeManager from './components/DishTypeManager';
 import Modal from './components/Modal';
 
 function App() {
