@@ -15,8 +15,11 @@
   padding: 24px;
   border-radius: 8px;
   position: relative;
-  width: 80%;
-  max-width: 800px;
+  width: 90%;
+  height: 90%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-close {
@@ -27,4 +30,9 @@
   background: none;
   font-size: 24px;
   cursor: pointer;
+}
+
+.modal-content {
+  flex-grow: 1;
+  overflow-y: auto;
 }

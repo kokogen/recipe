@@ -5,6 +5,7 @@ import datetime
 class IngredientBase(BaseModel):
     name: str
     quantity: str
+    unit: Optional[str] = None
 
 class IngredientCreate(IngredientBase):
     pass

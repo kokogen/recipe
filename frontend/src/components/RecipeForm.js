@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
-const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe }) => {
+const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe, onClose }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [dishTypeId, setDishTypeId] = useState('');
   const [dishTypes, setDishTypes] = useState([]);
-  const [ingredients, setIngredients] = useState([{ name: '', quantity: '' }]);
+  const [ingredients, setIngredients] = useState([{ name: '', quantity: '', unit: '' }]);
   const [tags, setTags] = useState('');
+
+  const units = ["грамм", "килограмм", "литр", "пучок", "стакан", "столовая ложка", "чайная ложка", "штука", "щепотка"].sort();
 
   useEffect(() => {
     axios.get('http://localhost:8000/dish-types/')
@@ -17,9 +21,7 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe }) => {
       .catch(error => {
         console.error('There was an error fetching the dish types!', error);
       });
-  }, []);
 
-  useEffect(() => {
     if (editingRecipe) {
       setName(editingRecipe.name);
       setDescription(editingRecipe.description);
@@ -36,7 +38,7 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe }) => {
   };
 
   const handleAddIngredient = () => {
-    setIngredients([...ingredients, { name: '', quantity: '' }]);
+    setIngredients([...ingredients, { name: '', quantity: '', unit: '' }]);
   };
 
   const handleRemoveIngredient = index => {
@@ -57,21 +59,18 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe }) => {
 
     if (editingRecipe) {
       axios.put(`http://localhost:8000/recipes/${editingRecipe.id}`, recipe)
-        .then(response => {
+        .then((response) => {
           onRecipeUpdated(response.data);
+          onClose();
         })
         .catch(error => {
           console.error('There was an error updating the recipe!', error);
         });
     } else {
       axios.post('http://localhost:8000/recipes/', recipe)
-        .then(response => {
+        .then((response) => {
           onRecipeAdded(response.data);
-          setName('');
-          setDescription('');
-          setDishTypeId('');
-          setIngredients([{ name: '', quantity: '' }]);
-          setTags('');
+          onClose();
         })
         .catch(error => {
           console.error('There was an error creating the recipe!', error);
@@ -82,7 +81,7 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe }) => {
   return (
     <form onSubmit={handleSubmit}>
       <input type="text" name="name" placeholder="Recipe Name" value={name} onChange={e => setName(e.target.value)} required />
-      <textarea name="description" placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} required />
+      <ReactQuill value={description} onChange={setDescription} />
       <select name="dishTypeId" value={dishTypeId} onChange={e => setDishTypeId(e.target.value)} required>
         <option value="">Select Dish Type</option>
         {dishTypes.map(dishType => (
@@ -95,6 +94,7 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe }) => {
           <tr>
             <th>Name</th>
             <th>Quantity</th>
+            <th>Unit</th>
             <th></th>
           </tr>
         </thead>
@@ -103,6 +103,14 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe }) => {
             <tr key={index}>
               <td><input type="text" name="name" placeholder="Ingredient Name" value={ingredient.name} onChange={event => handleIngredientChange(index, event)} required /></td>
               <td><input type="text" name="quantity" placeholder="Quantity" value={ingredient.quantity} onChange={event => handleIngredientChange(index, event)} required /></td>
+              <td>
+                <select name="unit" value={ingredient.unit || ''} onChange={event => handleIngredientChange(index, event)} required>
+                  <option value="">Select Unit</option>
+                  {units.map(unit => (
+                    <option key={unit} value={unit}>{unit}</option>
+                  ))}
+                </select>
+              </td>
               <td><button type="button" onClick={() => handleRemoveIngredient(index)}>Remove</button></td>
             </tr>
           ))}

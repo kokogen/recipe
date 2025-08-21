@@ -123,7 +123,7 @@ function App() {
       </main>
       {showForm && (
         <Modal onClose={() => setShowForm(false)}>
-          <RecipeForm onRecipeAdded={handleRecipeAdded} onRecipeUpdated={handleRecipeUpdated} editingRecipe={editingRecipe} />
+          <RecipeForm onRecipeAdded={handleRecipeAdded} onRecipeUpdated={handleRecipeUpdated} editingRecipe={editingRecipe} onClose={() => setShowForm(false)} />
         </Modal>
       )}
       {showDishTypeManager && (

@@ -28,6 +28,7 @@ class Ingredient(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     quantity = Column(String)
+    unit = Column(String)
     recipe_id = Column(Integer, ForeignKey('recipes.id'))
 
     recipe = relationship("Recipe", back_populates="ingredients")
