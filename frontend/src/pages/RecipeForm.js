@@ -81,7 +81,9 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe, onClose }) 
   return (
     <form onSubmit={handleSubmit}>
       <input type="text" name="name" placeholder="Recipe Name" value={name} onChange={e => setName(e.target.value)} required />
-      <ReactQuill value={description} onChange={setDescription} />
+      <div className="description-editor">
+        <ReactQuill value={description} onChange={setDescription} />
+      </div>
       <select name="dishTypeId" value={dishTypeId} onChange={e => setDishTypeId(e.target.value)} required>
         <option value="">Select Dish Type</option>
         {dishTypes.map(dishType => (

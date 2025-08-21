@@ -40,6 +40,10 @@ body {
   padding: 16px;
 }
 
+.recipe-description img {
+  max-width: 100%;
+}
+
 .filters {
   display: flex;
   gap: 16px;
@@ -97,4 +101,15 @@ form button {
 .ingredient-inputs input {
   flex-grow: 1;
   margin-bottom: 0;
+}
+
+.description-editor {
+  height: 300px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.description-editor .ql-container {
+  flex-grow: 1;
 }

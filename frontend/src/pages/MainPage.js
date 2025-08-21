@@ -78,7 +78,7 @@ const MainPage = () => {
         {recipes.map(recipe => (
           <div key={recipe.id} className="recipe-card">
             <h2>{recipe.name}</h2>
-            <p>{recipe.description}</p>
+            <div className="recipe-description" dangerouslySetInnerHTML={{ __html: recipe.description }} />
             <Link to={`/recipe/edit/${recipe.id}`}>Edit</Link>
             <button onClick={() => handleDeleteRecipe(recipe.id)}>Delete</button>
           </div>
