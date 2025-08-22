@@ -10,6 +10,7 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe, onClose }) 
   const [dishTypes, setDishTypes] = useState([]);
   const [ingredients, setIngredients] = useState([{ name: '', quantity: '', unit: '' }]);
   const [tags, setTags] = useState('');
+  const [thumbnail, setThumbnail] = useState(null);
 
   const units = ["грамм", "килограмм", "литр", "пучок", "стакан", "столовая ложка", "чайная ложка", "штука", "щепотка"].sort();
 
@@ -28,6 +29,7 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe, onClose }) 
       setDishTypeId(editingRecipe.dish_type.id);
       setIngredients(editingRecipe.ingredients);
       setTags(editingRecipe.tags.map(tag => tag.tag).join(', '));
+      setThumbnail(editingRecipe.thumbnail);
     }
   }, [editingRecipe]);
 
@@ -47,7 +49,24 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe, onClose }) 
     setIngredients(values);
   };
 
-  const handleSubmit = event => {
+  const handleThumbnailChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setThumbnail(e.target.files[0]);
+    }
+  };
+
+  const handlePaste = (e) => {
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const blob = items[i].getAsFile();
+        setThumbnail(blob);
+        break;
+      }
+    }
+  };
+
+  const handleSubmit = async event => {
     event.preventDefault();
     const recipe = {
       name,
@@ -55,27 +74,33 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe, onClose }) 
       dish_type_id: dishTypeId,
       ingredients,
       tags: tags.split(',').map(tag => tag.trim()),
+      thumbnail: typeof thumbnail === 'string' ? thumbnail : null,
     };
 
+    let updatedRecipe;
+
     if (editingRecipe) {
-      axios.put(`http://localhost:8000/recipes/${editingRecipe.id}`, recipe)
-        .then((response) => {
-          onRecipeUpdated(response.data);
-          onClose();
-        })
-        .catch(error => {
-          console.error('There was an error updating the recipe!', error);
-        });
+      const response = await axios.put(`http://localhost:8000/recipes/${editingRecipe.id}`, recipe);
+      updatedRecipe = response.data;
     } else {
-      axios.post('http://localhost:8000/recipes/', recipe)
-        .then((response) => {
-          onRecipeAdded(response.data);
-          onClose();
-        })
-        .catch(error => {
-          console.error('There was an error creating the recipe!', error);
-        });
+      const response = await axios.post('http://localhost:8000/recipes/', recipe);
+      updatedRecipe = response.data;
     }
+
+    if (thumbnail && typeof thumbnail !== 'string') {
+      const formData = new FormData();
+      formData.append('file', thumbnail);
+      const response = await axios.post(`http://localhost:8000/recipes/${updatedRecipe.id}/thumbnail`, formData);
+      updatedRecipe = response.data;
+    }
+
+    if (editingRecipe) {
+      onRecipeUpdated(updatedRecipe);
+    } else {
+      onRecipeAdded(updatedRecipe);
+    }
+
+    onClose();
   };
 
   return (
@@ -120,6 +145,9 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe, onClose }) 
       </table>
       <button type="button" onClick={() => handleAddIngredient()}>Add Ingredient</button>
       <input type="text" name="tags" placeholder="Tags (comma-separated)" value={tags} onChange={e => setTags(e.target.value)} />
+      <h3>Thumbnail</h3>
+      {thumbnail && <img src={typeof thumbnail === 'string' ? `http://localhost:8000/${thumbnail}` : URL.createObjectURL(thumbnail)} alt="Thumbnail" style={{width: '100px'}}/>}
+      <input type="file" name="thumbnail" onChange={handleThumbnailChange} onPaste={handlePaste} />
       <button type="submit">{editingRecipe ? 'Update Recipe' : 'Add Recipe'}</button>
     </form>
   );

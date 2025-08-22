@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 import models, schemas
 
@@ -75,6 +75,7 @@ def create_recipe(db: Session, recipe: schemas.RecipeCreate):
         name=recipe.name,
         description=recipe.description,
         source_url=recipe.source_url,
+        thumbnail=recipe.thumbnail,
         dish_type_id=recipe.dish_type_id
     )
     db.add(db_recipe)
@@ -94,8 +95,6 @@ def create_recipe(db: Session, recipe: schemas.RecipeCreate):
     db.commit()
     db.refresh(db_recipe)
     return db_recipe
-
-from sqlalchemy.orm import Session, joinedload
 
 def delete_recipe(db: Session, recipe_id: int):
     db_recipe = (
@@ -117,6 +116,7 @@ def update_recipe(db: Session, recipe_id: int, recipe: schemas.RecipeCreate):
         db_recipe.name = recipe.name
         db_recipe.description = recipe.description
         db_recipe.source_url = recipe.source_url
+        db_recipe.thumbnail = recipe.thumbnail
         db_recipe.dish_type_id = recipe.dish_type_id
 
         # Clear existing ingredients and tags

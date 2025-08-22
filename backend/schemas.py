@@ -43,6 +43,7 @@ class RecipeBase(BaseModel):
     name: str
     description: str
     source_url: Optional[str] = None
+    thumbnail: Optional[str] = None
     dish_type_id: int
 
 class RecipeCreate(RecipeBase):
@@ -55,6 +56,7 @@ class Recipe(RecipeBase):
     ingredients: List[Ingredient] = []
     tags: List[Tag] = []
     dish_type: DishType
+    thumbnail: Optional[str] = None
 
     class Config:
         orm_mode = True

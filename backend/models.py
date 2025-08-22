@@ -15,6 +15,7 @@ class Recipe(Base):
     name = Column(String, index=True, nullable=False)
     description = Column(String, nullable=False)
     source_url = Column(String)
+    thumbnail = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
     dish_type_id = Column(Integer, ForeignKey('dish_types.id'), nullable=False)
 

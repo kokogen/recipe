@@ -39,6 +39,7 @@ const MainPage = ({
           <tr>
             <th onClick={() => handleSort('id')}>ID{getSortIndicator('id')}</th>
             <th onClick={() => handleSort('name')}>Name{getSortIndicator('name')}</th>
+            <th>Thumbnail</th>
             <th>Source URL</th>
             <th onClick={() => handleSort('created_at')}>Creation Date{getSortIndicator('created_at')}</th>
             <th onClick={() => handleSort('dish_type')}>Dish Type{getSortIndicator('dish_type')}</th>
@@ -51,6 +52,7 @@ const MainPage = ({
             <tr key={recipe.id}>
               <td>{recipe.id}</td>
               <td>{recipe.name}</td>
+              <td>{recipe.thumbnail && <img src={`http://localhost:8000/${recipe.thumbnail}`} alt={recipe.name} style={{width: '100px'}} />}</td>
               <td><a href={recipe.source_url} target="_blank" rel="noopener noreferrer">{recipe.source_url}</a></td>
               <td>{new Date(recipe.created_at).toLocaleDateString()}</td>
               <td>{recipe.dish_type.name}</td>
