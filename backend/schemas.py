@@ -5,7 +5,7 @@ import datetime
 class IngredientBase(BaseModel):
     name: str
     quantity: str
-    unit: Optional[str] = None
+    unit: str
 
 class IngredientCreate(IngredientBase):
     pass
@@ -18,14 +18,12 @@ class Ingredient(IngredientBase):
         orm_mode = True
 
 class TagBase(BaseModel):
-    name: str
+    tag: str
 
 class TagCreate(TagBase):
     pass
 
 class Tag(TagBase):
-    id: int
-
     class Config:
         orm_mode = True
 

@@ -27,7 +27,7 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe, onClose }) 
       setDescription(editingRecipe.description);
       setDishTypeId(editingRecipe.dish_type.id);
       setIngredients(editingRecipe.ingredients);
-      setTags(editingRecipe.tags.map(tag => tag.name).join(', '));
+      setTags(editingRecipe.tags.map(tag => tag.tag).join(', '));
     }
   }, [editingRecipe]);
 

@@ -25,17 +25,14 @@ def delete_dish_type(db: Session, dish_type_id: int):
         db.commit()
     return db_dish_type
 
-def get_tag(db: Session, tag_id: int):
-    return db.query(models.Tag).filter(models.Tag.id == tag_id).first()
-
-def get_tag_by_name(db: Session, name: str):
-    return db.query(models.Tag).filter(models.Tag.name == name).first()
+def get_tag_by_tag(db: Session, tag: str):
+    return db.query(models.Tag).filter(models.Tag.tag == tag).first()
 
 def get_tags(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Tag).offset(skip).limit(limit).all()
 
 def create_tag(db: Session, tag: schemas.TagCreate):
-    db_tag = models.Tag(name=tag.name)
+    db_tag = models.Tag(tag=tag.tag)
     db.add(db_tag)
     db.commit()
     db.refresh(db_tag)
@@ -89,17 +86,26 @@ def create_recipe(db: Session, recipe: schemas.RecipeCreate):
         db.add(db_ingredient)
 
     for tag_name in recipe.tags:
-        tag = get_tag_by_name(db, name=tag_name)
+        tag = get_tag_by_tag(db, tag=tag_name)
         if not tag:
-            tag = create_tag(db, schemas.TagCreate(name=tag_name))
+            tag = create_tag(db, schemas.TagCreate(tag=tag_name))
         db_recipe.tags.append(tag)
 
     db.commit()
     db.refresh(db_recipe)
     return db_recipe
 
+from sqlalchemy.orm import Session, joinedload
+
 def delete_recipe(db: Session, recipe_id: int):
-    db_recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
+    db_recipe = (
+        db.query(models.Recipe)
+        .options(joinedload(models.Recipe.dish_type))
+        .options(joinedload(models.Recipe.tags))
+        .options(joinedload(models.Recipe.ingredients))
+        .filter(models.Recipe.id == recipe_id)
+        .first()
+    )
     if db_recipe:
         db.delete(db_recipe)
         db.commit()
@@ -123,9 +129,9 @@ def update_recipe(db: Session, recipe_id: int, recipe: schemas.RecipeCreate):
             db.add(db_ingredient)
 
         for tag_name in recipe.tags:
-            tag = get_tag_by_name(db, name=tag_name)
+            tag = get_tag_by_tag(db, tag=tag_name)
             if not tag:
-                tag = create_tag(db, schemas.TagCreate(name=tag_name))
+                tag = create_tag(db, schemas.TagCreate(tag=tag_name))
             db_recipe.tags.append(tag)
 
         db.commit()

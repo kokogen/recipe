@@ -54,7 +54,7 @@ const MainPage = ({
               <td><a href={recipe.source_url} target="_blank" rel="noopener noreferrer">{recipe.source_url}</a></td>
               <td>{new Date(recipe.created_at).toLocaleDateString()}</td>
               <td>{recipe.dish_type.name}</td>
-              <td>{recipe.tags.map(tag => tag.name).join(', ')}</td>
+              <td>{recipe.tags.map(tag => tag.tag).join(', ')}</td>
               <td>
                 <div className="actions-menu">
                   <button>...</button>
