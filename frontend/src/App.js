@@ -16,6 +16,8 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [sortBy, setSortBy] = useState('id');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     axios.get('http://localhost:8000/dish-types/')
@@ -32,11 +34,16 @@ function App() {
     setPage(1);
     setHasMore(true);
     fetchRecipes(1, true);
-  }, [selectedDishType, searchTerm]);
+  }, [selectedDishType, searchTerm, sortBy, sortOrder]);
 
   const fetchRecipes = (page, newSearch = false) => {
     let url = 'http://localhost:8000/recipes/';
-    const params = { skip: (page - 1) * 10, limit: 10 };
+    const params = { 
+      skip: (page - 1) * 10, 
+      limit: 10,
+      sort_by: sortBy,
+      sort_order: sortOrder
+    };
     if (selectedDishType) {
       params.dish_type_id = selectedDishType;
     }
@@ -60,16 +67,25 @@ function App() {
       });
   }
 
+  const handleSort = (key) => {
+    if (sortBy === key) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(key);
+      setSortOrder('asc');
+    }
+  };
+
   const handleRecipeAdded = (recipe) => {
-    setRecipes([recipe, ...recipes]);
     setShowForm(false);
+    fetchRecipes(1, true);
   };
 
   const handleRecipeUpdated = (recipe) => {
-    const newRecipes = recipes.map(r => (r.id === recipe.id ? recipe : r));
-    setRecipes(newRecipes);
+    console.log('Recipe updated:', recipe);
     setEditingRecipe(null);
     setShowForm(false);
+    fetchRecipes(1, true);
   };
 
   const handleDeleteRecipe = (recipeId) => {
@@ -101,26 +117,22 @@ function App() {
         </div>
       </header>
       <main className="main-content">
-        <div className="filters">
-          <select onChange={e => setSelectedDishType(e.target.value)} value={selectedDishType}>
-            <option value="">All Dish Types</option>
-            {dishTypes.map(dishType => (
-              <option key={dishType.id} value={dishType.id}>{dishType.name}</option>
-            ))}
-          </select>
-          <input type="text" placeholder="Search..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
-        </div>
-        <div className="recipe-list">
-          {recipes.map(recipe => (
-            <div key={recipe.id} className="recipe-card">
-              <h2>{recipe.name}</h2>
-              <p>{recipe.description}</p>
-              <button onClick={() => handleEditRecipe(recipe)}>Edit</button>
-              <button onClick={() => handleDeleteRecipe(recipe.id)}>Delete</button>
-            </div>
-          ))}
-        </div>
-        {hasMore && <button onClick={() => fetchRecipes(page)}>Load More</button>}
+        <MainPage
+          recipes={recipes}
+          dishTypes={dishTypes}
+          selectedDishType={selectedDishType}
+          setSelectedDishType={setSelectedDishType}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          fetchRecipes={fetchRecipes}
+          hasMore={hasMore}
+          handleEditRecipe={handleEditRecipe}
+          handleDeleteRecipe={handleDeleteRecipe}
+          page={page}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          handleSort={handleSort}
+        />
       </main>
       {showForm && (
         <Modal onClose={() => setShowForm(false)}>

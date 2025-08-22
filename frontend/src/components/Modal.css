@@ -25,13 +25,20 @@
 
 .modal-close {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: -20px;
+  right: -20px;
   border: none;
-  background: none;
-  font-size: 24px;
+  background: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
   cursor: pointer;
   z-index: 1051;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
 
 .modal-content {

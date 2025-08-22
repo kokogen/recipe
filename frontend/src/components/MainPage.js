@@ -1,66 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React from 'react';
 
-const MainPage = () => {
-  const [recipes, setRecipes] = useState([]);
-  const [dishTypes, setDishTypes] = useState([]);
-  const [selectedDishType, setSelectedDishType] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-
-  useEffect(() => {
-    axios.get('http://localhost:8000/dish-types/')
-      .then(response => {
-        setDishTypes(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the dish types!', error);
-      });
-  }, []);
-
-  useEffect(() => {
-    setRecipes([]);
-    setPage(1);
-    setHasMore(true);
-    fetchRecipes(1, true);
-  }, [selectedDishType, searchTerm]);
-
-  const fetchRecipes = (page, newSearch = false) => {
-    let url = 'http://localhost:8000/recipes/';
-    const params = { skip: (page - 1) * 10, limit: 10 };
-    if (selectedDishType) {
-      params.dish_type_id = selectedDishType;
+const MainPage = ({
+  recipes,
+  dishTypes,
+  selectedDishType,
+  setSelectedDishType,
+  searchTerm,
+  setSearchTerm,
+  fetchRecipes,
+  hasMore,
+  handleEditRecipe,
+  handleDeleteRecipe,
+  page,
+  sortBy,
+  sortOrder,
+  handleSort,
+}) => {
+  const getSortIndicator = (key) => {
+    if (sortBy === key) {
+      return sortOrder === 'asc' ? ' ▲' : ' ▼';
     }
-    if (searchTerm) {
-      params.search = searchTerm;
-    }
-    axios.get(url, { params })
-      .then(response => {
-        if (response.data.length === 0) {
-          setHasMore(false);
-        }
-        if (newSearch) {
-          setRecipes(response.data);
-        } else {
-          setRecipes([...recipes, ...response.data]);
-        }
-        setPage(page + 1);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the recipes!', error);
-      });
-  }
-
-  const handleDeleteRecipe = (recipeId) => {
-    axios.delete(`http://localhost:8000/recipes/${recipeId}`)
-      .then(() => {
-        setRecipes(recipes.filter(recipe => recipe.id !== recipeId));
-      })
-      .catch(error => {
-        console.error('There was an error deleting the recipe!', error);
-      });
+    return '';
   };
 
   return (
@@ -74,16 +34,40 @@ const MainPage = () => {
         </select>
         <input type="text" placeholder="Search..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
       </div>
-      <div className="recipe-list">
-        {recipes.map(recipe => (
-          <div key={recipe.id} className="recipe-card">
-            <h2>{recipe.name}</h2>
-            <div className="recipe-description" dangerouslySetInnerHTML={{ __html: recipe.description }} />
-            <Link to={`/recipe/edit/${recipe.id}`}>Edit</Link>
-            <button onClick={() => handleDeleteRecipe(recipe.id)}>Delete</button>
-          </div>
-        ))}
-      </div>
+      <table className="recipe-table">
+        <thead>
+          <tr>
+            <th onClick={() => handleSort('id')}>ID{getSortIndicator('id')}</th>
+            <th onClick={() => handleSort('name')}>Name{getSortIndicator('name')}</th>
+            <th onClick={() => handleSort('source_url')}>Source URL{getSortIndicator('source_url')}</th>
+            <th onClick={() => handleSort('created_at')}>Creation Date{getSortIndicator('created_at')}</th>
+            <th>Dish Type</th>
+            <th>Tags</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {recipes.map(recipe => (
+            <tr key={recipe.id}>
+              <td>{recipe.id}</td>
+              <td>{recipe.name}</td>
+              <td><a href={recipe.source_url} target="_blank" rel="noopener noreferrer">{recipe.source_url}</a></td>
+              <td>{new Date(recipe.created_at).toLocaleDateString()}</td>
+              <td>{recipe.dish_type.name}</td>
+              <td>{recipe.tags.map(tag => tag.name).join(', ')}</td>
+              <td>
+                <div className="actions-menu">
+                  <button>...</button>
+                  <div className="actions-dropdown">
+                    <button onClick={() => handleEditRecipe(recipe)}>Edit</button>
+                    <button onClick={() => handleDeleteRecipe(recipe.id)}>Delete</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       {hasMore && <button onClick={() => fetchRecipes(page)}>Load More</button>}
     </main>
   );

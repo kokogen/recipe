@@ -20,8 +20,8 @@ def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)):
     return crud.create_recipe(db=db, recipe=recipe)
 
 @router.get("/recipes/", response_model=List[schemas.Recipe])
-def read_recipes(skip: int = 0, limit: int = 100, dish_type_id: int = None, search: str = None, db: Session = Depends(get_db)):
-    recipes = crud.get_recipes(db, skip=skip, limit=limit, dish_type_id=dish_type_id, search=search)
+def read_recipes(skip: int = 0, limit: int = 100, dish_type_id: int = None, search: str = None, sort_by: str = None, sort_order: str = 'asc', db: Session = Depends(get_db)):
+    recipes = crud.get_recipes(db, skip=skip, limit=limit, dish_type_id=dish_type_id, search=search, sort_by=sort_by, sort_order=sort_order)
     return recipes
 
 @router.get("/recipes/{recipe_id}", response_model=schemas.Recipe)

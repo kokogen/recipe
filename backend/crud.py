@@ -44,12 +44,27 @@ def create_tag(db: Session, tag: schemas.TagCreate):
 def get_recipe(db: Session, recipe_id: int):
     return db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
 
-def get_recipes(db: Session, skip: int = 0, limit: int = 100, dish_type_id: int = None, search: str = None):
+def get_recipes(db: Session, skip: int = 0, limit: int = 100, dish_type_id: int = None, search: str = None, sort_by: str = None, sort_order: str = 'asc'):
     query = db.query(models.Recipe)
     if dish_type_id:
         query = query.filter(models.Recipe.dish_type_id == dish_type_id)
     if search:
         query = query.filter(models.Recipe.name.contains(search) | models.Recipe.description.contains(search))
+    
+    if sort_by:
+        sort_map = {
+            'id': models.Recipe.id,
+            'name': models.Recipe.name,
+            'source_url': models.Recipe.source_url,
+            'created_at': models.Recipe.created_at
+        }
+        column = sort_map.get(sort_by)
+        if column is not None:
+            if sort_order == 'asc':
+                query = query.order_by(column.asc())
+            else:
+                query = query.order_by(column.desc())
+
     return query.offset(skip).limit(limit).all()
 
 def create_recipe(db: Session, recipe: schemas.RecipeCreate):

@@ -34,6 +34,35 @@ body {
   gap: 16px;
 }
 
+.recipe-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.recipe-table th, .recipe-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.actions-menu {
+  position: relative;
+}
+
+.actions-dropdown {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  z-index: 1;
+}
+
+.actions-menu:hover .actions-dropdown {
+  display: block;
+}
+
 .recipe-card {
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -61,6 +90,17 @@ form {
   border-radius: 8px;
 }
 
+.description-editor {
+  flex-grow: 1;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.description-editor .ql-container {
+  flex-grow: 1;
+}
+
 .ingredients-table {
   width: 100%;
   border-collapse: collapse;
@@ -69,8 +109,15 @@ form {
 
 .ingredients-table th, .ingredients-table td {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 0;
   text-align: left;
+}
+
+.ingredients-table input, .ingredients-table select {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  padding: 8px;
 }
 
 form input, form textarea, form select {
@@ -103,13 +150,9 @@ form button {
   margin-bottom: 0;
 }
 
-.description-editor {
-  height: 300px;
-  margin-bottom: 8px;
-  display: flex;
-  flex-direction: column;
-}
-
-.description-editor .ql-container {
-  flex-grow: 1;
+.delete-ingredient-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
 }
