@@ -143,12 +143,12 @@ const RecipeForm = ({ onRecipeAdded, onRecipeUpdated, editingRecipe, onClose }) 
           ))}
         </tbody>
       </table>
-      <button type="button" onClick={() => handleAddIngredient()}>Add Ingredient</button>
+      <button type="button" onClick={() => handleAddIngredient()}><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTkgMTNoLTZ2NmgtMnYtNkg1di0yaDZWN2gydjZoNnYyWiIvPjwvc3ZnPg==" alt="Add Ingredient" /></button>
       <input type="text" name="tags" placeholder="Tags (comma-separated)" value={tags} onChange={e => setTags(e.target.value)} />
       <h3>Thumbnail</h3>
       {thumbnail && <img src={typeof thumbnail === 'string' ? `http://localhost:8000/${thumbnail}` : URL.createObjectURL(thumbnail)} alt="Thumbnail" style={{width: '100px'}}/>}
       <input type="file" name="thumbnail" onChange={handleThumbnailChange} onPaste={handlePaste} />
-      <button type="submit">{editingRecipe ? 'Update Recipe' : 'Add Recipe'}</button>
+      <button type="submit">{editingRecipe ? <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktcGVuY2lsIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik0xMi4xNDYuMTQ2YS41LjUgMCAwIDEgLjcwOCAwbDMgM2EuNS41IDAgMCAxIDAgLjcwOGwtMTAgMTBhLjUuNSAwIDAgMS0uMTY4LjExbC01IDJhLjUuNSAwIDAgMS0uNjUtLjY1bDMtNWEuNS41IDAgMCAxIC4xMS0uMTY4ek0xMS4yMDcgMi41IDEzLjUgNC43OTMgMTQuNzkzIDMuNSAxMi41IDEuMjA3em0xLjU4NiAzTDEwLjUgMy4yMDcgNCA5LjcwN1YxMGguNWEuNS41IDAgMCAxIC41LjV2LjVoLjVhLjUuNSAwIDAgMSAuNS41di41aC4yOTN6bS05Ljc2MSA1LjE3NS0uMTA2LjEwNi0xLjUyOCAzLjgyMSAzLjgyMS0xLjUyOC4xMDYtLjEwNkEuNS41IDAgMCAxIDUgMTIuNVYxMmgtLjVhLjUuNSAwIDAgMS0uNS0uNVYxMWgtLjVhLjUuNSAwIDAgMS0uNDY4LS4zMjVaIi8+Cjwvc3ZnPg==" alt="Update Recipe" /> : <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTkgMTNoLTZ2NmgtMnYtNkg1di0yaDZWN2gydjZoNnYyWiIvPjwvc3ZnPg==" alt="Add Recipe" />}</button>
     </form>
   );
 };

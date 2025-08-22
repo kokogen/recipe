@@ -61,8 +61,8 @@ const MainPage = ({
                 <div className="actions-menu">
                   <button>...</button>
                   <div className="actions-dropdown">
-                    <button onClick={() => handleEditRecipe(recipe)}>Edit</button>
-                    <button onClick={() => handleDeleteRecipe(recipe.id)}>Delete</button>
+                    <button onClick={() => handleEditRecipe(recipe)}><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktcGVuY2lsIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik0xMi4xNDYuMTQ2YS41LjUgMCAwIDEgLjcwOCAwbDMgM2EuNS41IDAgMCAxIDAgLjcwOGwtMTAgMTBhLjUuNSAwIDAgMS0uMTY4LjExbC01IDJhLjUuNSAwIDAgMS0uNjUtLjY1bDMtNWEuNS41IDAgMCAxIC4xMS0uMTY4ek0xMS4yMDcgMi41IDEzLjUgNC43OTMgMTQuNzkzIDMuNSAxMi41IDEuMjA3em0xLjU4NiAzTDEwLjUgMy4yMDcgNCA5LjcwN1YxMGguNWEuNS41IDAgMCAxIC41LjV2LjVoLjVhLjUuNSAwIDAgMSAuNS41di41aC4yOTN6bS05Ljc2MSA1LjE3NS0uMTA2LjEwNi0xLjUyOCAzLjgyMSAzLjgyMS0xLjUyOC4xMDYtLjEwNkEuNS41IDAgMCAxIDUgMTIuNVYxMmgtLjVhLjUuNSAwIDAgMS0uNS0uNVYxMWgtLjVhLjUuNSAwIDAgMS0uNDY4LS4zMjVaIi8+Cjwvc3ZnPg==" alt="Edit" /></button>
+                    <button onClick={() => handleDeleteRecipe(recipe.id)}><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktdHJhc2giIHZpZXdCb3g9IjAgMCAxNiAxNiI+CiAgPHBhdGggZD0iTTUuNSAyLjVBNi41LjUgMCAwIDEgNiAwSDEwYTEuNS41IDAgMCAxIC41LjV2MWgxLjVBNi41LjUgMCAwIDEgMTYgM3YxLjVBNi41LjUgMCAwIDEgMTUuNSAzSDE0djEwLjVBNi41LjUgMCAwIDEgMTIuNSAxNkgzLjVBNi41LjUgMCAwIDEgMiAxMy41VjNIMS41QS41LjUgMCAwIDEgMSAydi0uNUEuNS41IDAgMCAxIDEuNSAyaDF2LTFoLjV6TTMgM2gxMHYxMC41YS41LjUgMCAwIDEgLS41LjVIMy41YS41LjUgMCAwIDEgLS41LS41VjN6TTUuNSA1LjVBNS41IDAgMCAxIDYgNWgxYTkuNSA5LjUgMCAwIDEgMSAwdjZoLTFhLjUuNSAwIDAgMS0uNS0uNVY1eiIvPgo8L3N2Zz4=" alt="Delete" /></button>
                   </div>
                 </div>
               </td>

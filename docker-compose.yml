@@ -7,10 +7,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ${MEDIA_HOST_PATH}:/app/media
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/recipeum
-      - MEDIA_PATH=/app/media
+      - DATABASE_URL=${DATABASE_URL}
     depends_on:
       - db
 
@@ -26,9 +25,9 @@ services:
   db:
     image: postgres:13
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=recipeum
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     healthcheck:
