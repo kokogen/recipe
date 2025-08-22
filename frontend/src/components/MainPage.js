@@ -39,9 +39,9 @@ const MainPage = ({
           <tr>
             <th onClick={() => handleSort('id')}>ID{getSortIndicator('id')}</th>
             <th onClick={() => handleSort('name')}>Name{getSortIndicator('name')}</th>
-            <th onClick={() => handleSort('source_url')}>Source URL{getSortIndicator('source_url')}</th>
+            <th>Source URL</th>
             <th onClick={() => handleSort('created_at')}>Creation Date{getSortIndicator('created_at')}</th>
-            <th>Dish Type</th>
+            <th onClick={() => handleSort('dish_type')}>Dish Type{getSortIndicator('dish_type')}</th>
             <th>Tags</th>
             <th>Actions</th>
           </tr>

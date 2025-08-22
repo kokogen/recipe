@@ -52,18 +52,24 @@ def get_recipes(db: Session, skip: int = 0, limit: int = 100, dish_type_id: int 
         query = query.filter(models.Recipe.name.contains(search) | models.Recipe.description.contains(search))
     
     if sort_by:
-        sort_map = {
-            'id': models.Recipe.id,
-            'name': models.Recipe.name,
-            'source_url': models.Recipe.source_url,
-            'created_at': models.Recipe.created_at
-        }
-        column = sort_map.get(sort_by)
-        if column is not None:
+        if sort_by == 'dish_type':
+            query = query.join(models.DishType)
             if sort_order == 'asc':
-                query = query.order_by(column.asc())
+                query = query.order_by(models.DishType.name.asc())
             else:
-                query = query.order_by(column.desc())
+                query = query.order_by(models.DishType.name.desc())
+        else:
+            sort_map = {
+                'id': models.Recipe.id,
+                'name': models.Recipe.name,
+                'created_at': models.Recipe.created_at
+            }
+            column = sort_map.get(sort_by)
+            if column is not None:
+                if sort_order == 'asc':
+                    query = query.order_by(column.asc())
+                else:
+                    query = query.order_by(column.desc())
 
     return query.offset(skip).limit(limit).all()
 
