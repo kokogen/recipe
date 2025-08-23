@@ -42,7 +42,7 @@ const DishTypeManager = () => {
       <h2>Dish Type Manager</h2>
       <form onSubmit={handleAddDishType}>
         <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="New Dish Type" required />
-        <button type="submit"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTkgMTNoLTZ2NmgtMnYtNkg1di0yaDZWN2gydjZoNnYyWiIvPjwvc3ZnPg==" alt="Add Dish Type" /></button>
+        <button type="submit"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjQ4IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iNCIvPgogIDxsaW5lIHgxPSIzMCIgeTE9IjUwIiB4Mj0iNzAiIHkyPSI1MCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxsaW5lIHgxPSI1MCIgeTE9IjMwIiB4Mj0iNTAiIHkyPSI3MCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjYiIHN0cm9rZS1saWJlY2FwPSJyb3VuZCIvPgo8L3N2Zz4K" alt="Add Dish Type" /></button>
       </form>
       <ul>
         {dishTypes.map(dishType => (

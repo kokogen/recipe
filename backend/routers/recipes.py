@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Query
 from sqlalchemy.orm import Session
 from typing import List
 import shutil
+import os
 
 import crud, models, schemas
 from database import SessionLocal
@@ -26,7 +27,8 @@ def upload_thumbnail(recipe_id: int, file: UploadFile = File(...), db: Session =
     if not db_recipe:
         raise HTTPException(status_code=404, detail="Recipe not found")
     
-    file_path = f"media/{file.filename}"
+    _, extension = os.path.splitext(file.filename)
+    file_path = f"media/{recipe_id}{extension}"
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     
@@ -36,8 +38,9 @@ def upload_thumbnail(recipe_id: int, file: UploadFile = File(...), db: Session =
     return db_recipe
 
 @router.get("/recipes/", response_model=List[schemas.Recipe])
-def read_recipes(skip: int = 0, limit: int = 100, dish_type_id: int = None, search: str = None, sort_by: str = None, sort_order: str = 'asc', db: Session = Depends(get_db)):
-    recipes = crud.get_recipes(db, skip=skip, limit=limit, dish_type_id=dish_type_id, search=search, sort_by=sort_by, sort_order=sort_order)
+def read_recipes(skip: int = 0, limit: int = 100, dish_type_id: int = None, search: str = None, sort_by: str = None, sort_order: str = 'asc', tags: str = None, db: Session = Depends(get_db)):
+    tags_list = tags.split(',') if tags else None
+    recipes = crud.get_recipes(db, skip=skip, limit=limit, dish_type_id=dish_type_id, search=search, sort_by=sort_by, sort_order=sort_order, tags=tags_list)
     return recipes
 
 @router.get("/recipes/{recipe_id}", response_model=schemas.Recipe)

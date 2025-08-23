@@ -12,7 +12,9 @@ function App() {
   const [editingRecipe, setEditingRecipe] = useState(null);
   const [showDishTypeManager, setShowDishTypeManager] = useState(false);
   const [dishTypes, setDishTypes] = useState([]);
+  const [tags, setTags] = useState([]);
   const [selectedDishType, setSelectedDishType] = useState('');
+  const [selectedTags, setSelectedTags] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -27,6 +29,13 @@ function App() {
       .catch(error => {
         console.error('There was an error fetching the dish types!', error);
       });
+    axios.get('http://localhost:8000/tags/')
+      .then(response => {
+        setTags(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the tags!', error);
+      });
   }, []);
 
   useEffect(() => {
@@ -34,7 +43,7 @@ function App() {
     setPage(1);
     setHasMore(true);
     fetchRecipes(1, true);
-  }, [selectedDishType, searchTerm, sortBy, sortOrder]);
+  }, [selectedDishType, selectedTags, searchTerm, sortBy, sortOrder]);
 
   const fetchRecipes = (page, newSearch = false) => {
     let url = 'http://localhost:8000/recipes/';
@@ -42,7 +51,8 @@ function App() {
       skip: (page - 1) * 10, 
       limit: 10,
       sort_by: sortBy,
-      sort_order: sortOrder
+      sort_order: sortOrder,
+      tags: selectedTags.join(','),
     };
     if (selectedDishType) {
       params.dish_type_id = selectedDishType;
@@ -120,8 +130,11 @@ function App() {
         <MainPage
           recipes={recipes}
           dishTypes={dishTypes}
+          tags={tags}
           selectedDishType={selectedDishType}
           setSelectedDishType={setSelectedDishType}
+          selectedTags={selectedTags}
+          setSelectedTags={setSelectedTags}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           fetchRecipes={fetchRecipes}

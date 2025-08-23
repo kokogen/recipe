@@ -15,7 +15,7 @@ class Ingredient(IngredientBase):
     recipe_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class TagBase(BaseModel):
     tag: str
@@ -25,7 +25,7 @@ class TagCreate(TagBase):
 
 class Tag(TagBase):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class DishTypeBase(BaseModel):
     name: str
@@ -37,7 +37,7 @@ class DishType(DishTypeBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class RecipeBase(BaseModel):
     name: str
@@ -59,4 +59,4 @@ class Recipe(RecipeBase):
     thumbnail: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -1,10 +1,14 @@
 import React from 'react';
+import Select from 'react-select';
 
 const MainPage = ({
   recipes,
   dishTypes,
+  tags,
   selectedDishType,
   setSelectedDishType,
+  selectedTags,
+  setSelectedTags,
   searchTerm,
   setSearchTerm,
   fetchRecipes,
@@ -23,6 +27,8 @@ const MainPage = ({
     return '';
   };
 
+  const tagOptions = tags.map(tag => ({ value: tag.tag, label: tag.tag }));
+
   return (
     <main className="main-content">
       <div className="filters">
@@ -32,6 +38,12 @@ const MainPage = ({
             <option key={dishType.id} value={dishType.id}>{dishType.name}</option>
           ))}
         </select>
+        <Select
+          isMulti
+          options={tagOptions}
+          value={selectedTags.map(tag => ({ value: tag, label: tag }))}
+          onChange={selectedOptions => setSelectedTags(selectedOptions.map(option => option.value))}
+        />
         <input type="text" placeholder="Search..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
       </div>
       <table className="recipe-table">

@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session, joinedload
+from typing import List
 
 import models, schemas
 
@@ -41,12 +42,15 @@ def create_tag(db: Session, tag: schemas.TagCreate):
 def get_recipe(db: Session, recipe_id: int):
     return db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
 
-def get_recipes(db: Session, skip: int = 0, limit: int = 100, dish_type_id: int = None, search: str = None, sort_by: str = None, sort_order: str = 'asc'):
+def get_recipes(db: Session, skip: int = 0, limit: int = 100, dish_type_id: int = None, search: str = None, sort_by: str = None, sort_order: str = 'asc', tags: List[str] = None):
     query = db.query(models.Recipe)
     if dish_type_id:
         query = query.filter(models.Recipe.dish_type_id == dish_type_id)
     if search:
         query = query.filter(models.Recipe.name.contains(search) | models.Recipe.description.contains(search))
+    if tags:
+        for tag in tags:
+            query = query.filter(models.Recipe.tags.any(models.Tag.tag == tag))
     
     if sort_by:
         if sort_by == 'dish_type':
