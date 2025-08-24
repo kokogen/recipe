@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import './MainPage.css';
 
 const MainPage = ({
   recipes,
@@ -49,14 +50,14 @@ const MainPage = ({
       <table className="recipe-table">
         <thead>
           <tr>
-            <th onClick={() => handleSort('id')}>ID{getSortIndicator('id')}</th>
-            <th onClick={() => handleSort('name')}>Name{getSortIndicator('name')}</th>
-            <th>Thumbnail</th>
-            <th>Source URL</th>
-            <th onClick={() => handleSort('created_at')}>Creation Date{getSortIndicator('created_at')}</th>
-            <th onClick={() => handleSort('dish_type')}>Dish Type{getSortIndicator('dish_type')}</th>
-            <th>Tags</th>
-            <th>Actions</th>
+            <th className="id-column" onClick={() => handleSort('id')}>ID{getSortIndicator('id')}</th>
+            <th className="name-column" onClick={() => handleSort('name')}>Name{getSortIndicator('name')}</th>
+            <th className="thumbnail-column">Thumbnail</th>
+            <th className="source-url-column">Source URL</th>
+            <th className="creation-date-column" onClick={() => handleSort('created_at')}>Creation Date{getSortIndicator('created_at')}</th>
+            <th className="dish-type-column" onClick={() => handleSort('dish_type')}>Dish Type{getSortIndicator('dish_type')}</th>
+            <th className="tags-column">Tags</th>
+            <th className="actions-column">Actions</th>
           </tr>
         </thead>
         <tbody>

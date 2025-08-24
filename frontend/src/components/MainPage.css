@@ -1,0 +1,31 @@
+.recipe-table .id-column {
+  width: 5%;
+}
+
+.recipe-table .name-column {
+  width: 30%;
+}
+
+.recipe-table .thumbnail-column {
+  width: 10%;
+}
+
+.recipe-table .source-url-column {
+  width: 10%;
+}
+
+.recipe-table .creation-date-column {
+  width: 10%;
+}
+
+.recipe-table .dish-type-column {
+  width: 10%;
+}
+
+.recipe-table .tags-column {
+  width: 20%;
+}
+
+.recipe-table .actions-column {
+  width: 5%;
+}

@@ -22,3 +22,48 @@
 Выявлена следующая ошибка. Открываем фрому для ввода/редактирования рецепта и заполняем там новый рецепт либо редактируем имеющийся. После нажатия на кнопку "Update recipe" ожидается, что экран рецепта закроется, а информация на главном экране будет автоматически обновлена, чтобы отразить изменения.
 Однако, обновленияне происходит.
 Исправь это.
+
+
+лог из frontend:
+Sorting by key: name
+App.js:40 Fetching recipes with page: 1, newSearch: true, sortBy: name, sortOrder: asc
+App.js:54 Params: {skip: 0, limit: 10, sort_by: 'name', sort_order: 'asc'}
+лог из backend:
+INFO:     172.18.0.1:62180 - "GET /recipes/?skip=0&limit=10&sort_by=name&sort_order=asc HTTP/1.1" 200 OK
+
+лог из frontend:
+Sorting by key: id
+App.js:40 Fetching recipes with page: 1, newSearch: true, sortBy: id, sortOrder: asc
+App.js:54 Params: {skip: 0, limit: 10, sort_by: 'id', sort_order: 'asc'}
+лог из backend:
+INFO:     172.18.0.1:55706 - "GET /recipes/?skip=0&limit=10&sort_by=id&sort_order=asc HTTP/1.1" 200 OK
+
+
+Нужно переделать базу данных и логику работы с ней следующим образом:
+- Добавить внешний ключ в таблицу ingredients по полю recipe_id, связывающий ее с таблицей recipes;
+- В таблице tags оставить единственное поле tag (которое сейчас называется name), это поле будет первичным ключом;
+- Добавить внешний ключ в таблицу recipe_tags по полю recipe_id, связывающий ее с таблицей recipes;
+- Добавить внешний ключ в таблицу recipe_tags по полю tag, связывающий ее с таблицей tags. Поле tag_id удалить, так как его функцию теперь будет выполнять поле tag;
+- Все поля в таблице ingredients сделать обязательными. При удалении ингрдиента, удаляется строка из этой таблицы;
+- Добавить внешний ключ в таблицу recipes по полю dish_type_id, связывающий ее с таблицей dish_types;
+- Поле dish_type_id таблицы recipes сделать обязательным;
+
+Предварительно придется удалить все данные из всех таблиц, чтобы они не мешали переделывать ссылочную целостность.
+
+
+----
+
+backend:
+Reading recipes with tags: None
+
+INFO:     192.168.65.1:56543 - "GET /recipes/?skip=0&limit=10&sort_by=id&sort_order=asc&tags[]=%D0%B2%D0%BA%D1%83%D1%81%D0%BD%D0%BE HTTP/1.1" 200 OK
+
+INFO:     192.168.65.1:18382 - "GET /media/1.png HTTP/1.1" 304 Not Modified
+
+frontend:
+Manifest: Line: 1, column: 1, Syntax error.Understand this error
+App.js:49 selectedTags ['вкусно']
+
+
+Теперь поработаем над шириной колонок в таблице рецептов.
+Ширину колонок "Actions", "Creation Date" и "Thumbnail" уменьшить до ширины надписи. Ширину колонки "ID" сократить на 20%. Освободившееся пространство распределить пропорционально среди колонок "Name" и "Tags".

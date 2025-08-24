@@ -62,7 +62,7 @@ function App() {
     }
     axios.get(url, { params })
       .then(response => {
-        if (response.data.length === 0) {
+        if (response.data.length < 10) {
           setHasMore(false);
         }
         if (newSearch) {
